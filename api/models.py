@@ -1,5 +1,4 @@
 from django.db import models
-from .utils import generate_document_nr, calculate_due_date
 
 
 class Company(models.Model):
@@ -46,16 +45,10 @@ class Invoice(models.Model):
     def __str__(self):
         return f'Invoice {self.document_nr} by {self.provider}'
 
-    def save(self, *args, **kwargs):
-        num_previous_invoices = Invoice.objects.filter(provider=self.provider).count()
-        self.document_nr = generate_document_nr(num_previous_invoices)
-        self.due_date = calculate_due_date()
-        super().save(*args, **kwargs)
 
+class InvoiceRow(models.Model):
 
-class InvoiceBody(models.Model):
-
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoice_bodies')
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoice_rows')
 
     description = models.CharField(max_length=500)
 
@@ -63,8 +56,8 @@ class InvoiceBody(models.Model):
     price = models.PositiveIntegerField()
 
     class Meta:
-        verbose_name = 'invoice body'
-        verbose_name_plural = 'invoice bodies'
+        verbose_name = 'invoice row'
+        verbose_name_plural = 'invoice rows'
 
     def __str__(self):
         return self.description

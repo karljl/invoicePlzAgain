@@ -4,7 +4,7 @@ from .models import Invoice
 
 class InvoiceSerializer(serializers.ModelSerializer):
 
-    invoice_bodies = serializers.PrimaryKeyRelatedField(
+    invoice_rows = serializers.PrimaryKeyRelatedField(
         read_only=True,
         many=True
     )
