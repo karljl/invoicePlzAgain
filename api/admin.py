@@ -4,7 +4,7 @@ from .models import Company, Invoice, InvoiceRow
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    readonly_fields = ['document_nr', 'created']
+    readonly_fields = ['created']
     fields = ['document_nr', 'created', 'due_date', 'provider', 'customer']
 
 
