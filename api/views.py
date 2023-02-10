@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 
-from .models import Invoice, InvoiceRow
-from .serializers import InvoiceSerializer, InvoiceRowSerializer
+from .models import Invoice, InvoiceRow, Company
+from .serializers import InvoiceSerializer, InvoiceRowSerializer, CompanySerializer
 
 
 class InvoiceList(APIView):
@@ -96,3 +96,15 @@ class InvoiceRowDetail(APIView):
         invoice_row = self.get_object(pk)
         invoice_row.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CompanyList(APIView):
+
+    def get_role(self, request):
+        return request.query_params.get('role')
+
+    def get(self, request):
+        company_role = self.get_role(request)
+        companies = Company.objects.filter(role=company_role)
+        serializer = CompanySerializer(companies, many=True)
+        return Response(serializer.data)
