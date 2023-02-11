@@ -13,7 +13,6 @@ class Company(models.Model):
     country = models.CharField(max_length=100)
 
     registry_nr = models.CharField(max_length=50)
-    vat_nr = models.CharField(max_length=50, blank=True)
 
     class Meta:
         abstract = True
@@ -24,6 +23,7 @@ class Company(models.Model):
 
 class Provider(Company):
 
+    vat_nr = models.CharField(max_length=50, blank=True)
     iban = models.CharField(max_length=50, verbose_name='IBAN')
     bic_swift = models.CharField(max_length=50, verbose_name='BIC/SWIFT')
 
