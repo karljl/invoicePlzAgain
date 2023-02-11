@@ -10,17 +10,8 @@ from .serializers import InvoiceSerializer, InvoiceRowSerializer, ProviderSerial
 
 class InvoiceList(APIView):
 
-    def get_provider(self, request):
-        return request.query_params.get('provider')
-
     def get(self, request):
-        provider = self.get_provider(request)
-
-        if provider is not None:
-            invoices = Invoice.objects.filter(provider=provider)
-        else:
-            invoices = Invoice.objects.all()
-
+        invoices = Invoice.objects.all()
         serializer = InvoiceSerializer(invoices, many=True)
         return Response(serializer.data)
 
