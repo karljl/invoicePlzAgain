@@ -10,8 +10,17 @@ from .serializers import InvoiceSerializer, InvoiceRowSerializer, CompanySeriali
 
 class InvoiceList(APIView):
 
+    def get_provider(self, request):
+        return request.query_params.get('provider')
+
     def get(self, request):
-        invoices = Invoice.objects.all()
+        provider = self.get_provider(request)
+
+        if provider is not None:
+            invoices = Invoice.objects.filter(provider=provider)
+        else:
+            invoices = Invoice.objects.all()
+
         serializer = InvoiceSerializer(invoices, many=True)
         return Response(serializer.data)
 
@@ -106,7 +115,7 @@ class CompanyList(APIView):
     def get(self, request):
         company_role = self.get_role(request)
 
-        if company_role is not None:
+        if company_role is not None and company_role in {'customer', 'provider'}:
             companies = Company.objects.filter(role=company_role)
         else:
             companies = Company.objects.all()
