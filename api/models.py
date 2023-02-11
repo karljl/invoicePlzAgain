@@ -3,12 +3,6 @@ from django.db import models
 
 class Company(models.Model):
 
-    class Role(models.TextChoices):
-        CUSTOMER = 'customer'
-        PROVIDER = 'provider'
-
-    role = models.CharField(choices=Role.choices, max_length=8, default=Role.CUSTOMER)
-
     name = models.CharField(max_length=240)
     phone = models.CharField(max_length=50)
     email = models.EmailField()
@@ -21,15 +15,22 @@ class Company(models.Model):
     registry_nr = models.CharField(max_length=50)
     vat_nr = models.CharField(max_length=50, blank=True)
 
-    iban = models.CharField(max_length=50, blank=True, verbose_name='IBAN')
-    bic_swift = models.CharField(max_length=50, blank=True, verbose_name='BIC/SWIFT')
+    class Meta:
+        abstract = True
 
     def __str__(self):
         return self.name
 
-    class Meta:
-        verbose_name = 'company'
-        verbose_name_plural = 'companies'
+
+class Provider(Company):
+
+    iban = models.CharField(max_length=50, verbose_name='IBAN')
+    bic_swift = models.CharField(max_length=50, verbose_name='BIC/SWIFT')
+
+
+class Customer(Company):
+
+    pass
 
 
 class Invoice(models.Model):
@@ -39,8 +40,8 @@ class Invoice(models.Model):
     created = models.DateField(auto_now_add=True)
     due_date = models.DateField()
 
-    provider = models.ForeignKey(Company, on_delete=models.RESTRICT, related_name='provider')
-    customer = models.ForeignKey(Company, on_delete=models.RESTRICT, related_name='customer')
+    provider = models.ForeignKey(Provider, on_delete=models.RESTRICT, related_name='provider')
+    customer = models.ForeignKey(Customer, on_delete=models.RESTRICT, related_name='customer')
 
     def __str__(self):
         return f'Invoice {self.document_nr} by {self.provider}'

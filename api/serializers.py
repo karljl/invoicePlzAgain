@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Invoice, InvoiceRow, Company
+from .models import Invoice, InvoiceRow, Provider, Customer
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
@@ -21,8 +21,15 @@ class InvoiceRowSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class ProviderSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Company
+        model = Provider
+        fields = '__all__'
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Customer
         fields = '__all__'
