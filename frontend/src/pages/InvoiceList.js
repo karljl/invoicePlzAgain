@@ -19,7 +19,14 @@ const InvoiceList = () => {
         <>
             <div className="invoice-list">
                 {invoices.map(invoice => (
-                    <p>Invoice</p>
+                    <ul key={invoice.id}>
+                       <li>ID: {invoice.id}</li>
+                       <li>Document nr: {invoice.document_nr}</li>
+                       <li>Created: {invoice.created}</li>
+                       <li>Rows: {invoice.invoice_rows.map(
+                           invoice_row => (<p>row</p>)
+                       )}</li>
+                    </ul>
                 ))}
             </div>
         </>
